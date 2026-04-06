@@ -19,8 +19,7 @@ async function getClient() {
     return client;
 }
 
-module.exports = async function handler(req, res) {
-    // CORS headers — update origin to your login app's actual domain
+export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -37,24 +36,15 @@ module.exports = async function handler(req, res) {
     try {
         const client = await getClient();
         const db = client.db('finflow');
-
-        // Collection is either "individual_users" or "sme_users" depending on type
         const collectionName = userType === 'sme' ? 'sme_users' : 'individual_users';
         const usersCollection = db.collection(collectionName);
 
         const user = await usersCollection.findOne({ email: email.toLowerCase().trim() });
-
-        if (!user) {
-            return res.status(401).json({ success: false, message: 'No account found with this email address.' });
-        }
+        if (!user) return res.status(401).json({ success: false, message: 'No account found with this email address.' });
 
         const passwordMatch = await bcrypt.compare(password, user.passwordHash);
+        if (!passwordMatch) return res.status(401).json({ success: false, message: 'Incorrect password. Please try again.' });
 
-        if (!passwordMatch) {
-            return res.status(401).json({ success: false, message: 'Incorrect password. Please try again.' });
-        }
-
-        // Return success — optionally include a JWT token here
         return res.status(200).json({
             success: true,
             message: 'Login successful',
@@ -66,9 +56,8 @@ module.exports = async function handler(req, res) {
                 userType
             }
         });
-
     } catch (err) {
         console.error('Login error:', err);
         return res.status(500).json({ success: false, message: 'Server error. Please try again later.' });
     }
-};
+}
