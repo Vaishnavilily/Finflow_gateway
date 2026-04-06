@@ -1,13 +1,12 @@
 // api/auth/login.js
 // Vercel serverless function — POST /api/auth/login
 // Verifies email + password against MongoDB and returns success/failure.
-//
 // Required environment variables (set in Vercel dashboard):
 //   MONGODB_URI  — e.g. mongodb+srv://user:pass@cluster.mongodb.net/finflow
 //   JWT_SECRET   — any long random string for signing tokens (optional but recommended)
 
-const { MongoClient } = require('mongodb');
-const bcrypt = require('bcryptjs');
+import { MongoClient } from 'mongodb';   // ✅ ESM import
+import bcrypt from 'bcryptjs';
 
 let cachedClient = null;
 
