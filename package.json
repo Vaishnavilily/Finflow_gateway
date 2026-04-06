@@ -3,9 +3,10 @@
     "version": "1.0.0",
     "description": "FinFlow unified authentication portal",
     "private": true,
+    "type": "module",
     "dependencies": {
-        "bcryptjs": "^2.4.3",
-        "mongodb": "^6.5.0"
+        "bcryptjs": "^2.x.x",
+        "mongodb": "^6.x.x"
     },
     "engines": {
         "node": ">=18.x"
