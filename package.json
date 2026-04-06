@@ -5,8 +5,8 @@
     "private": true,
     "type": "module",
     "dependencies": {
-        "bcryptjs": "^2.x.x",
-        "mongodb": "^6.x.x"
+        "bcryptjs": "^2.4.3",
+        "mongodb": "^6.5.0"
     },
     "engines": {
         "node": ">=18.x"
