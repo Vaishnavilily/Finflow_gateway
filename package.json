@@ -1,0 +1,17 @@
+{
+    "name": "finflow-login",
+    "version": "1.0.0",
+    "description": "FinFlow unified authentication portal",
+    "private": true,
+    "dependencies": {
+        "bcryptjs": "^2.4.3",
+        "mongodb": "^6.5.0"
+    },
+    "engines": {
+        "node": ">=18.x"
+    },
+    "scripts": {
+        "dev": "vercel dev",
+        "start": "node api/auth/login.js"
+    }
+}
