@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FinFlow — Login</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap"
+        rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --blue-50: #E6F1FB;
+            --blue-100: #B5D4F4;
+            --blue-200: #85B7EB;
+            --blue-400: #378ADD;
+            --blue-600: #185FA5;
+            --blue-800: #0C447C;
+            --blue-900: #042C53;
+            --gray-50: #F7F8FA;
+            --gray-100: #EEF0F3;
+            --gray-200: #D5D9E0;
+            --gray-400: #8A92A0;
+            --gray-600: #4E5766;
+            --gray-800: #1E2430;
+            --red-50: #FFF0F0;
+            --red-400: #E24B4A;
+            --red-600: #A32D2D;
+            --green-50: #EAF7ED;
+            --green-600: #2D7D46;
+            --font: 'DM Sans', sans-serif;
+            --radius: 10px;
+            --radius-lg: 16px;
+            --shadow: 0 2px 12px rgba(14, 50, 90, 0.10), 0 1px 3px rgba(14, 50, 90, 0.08);
+            --shadow-lg: 0 8px 40px rgba(14, 50, 90, 0.14), 0 2px 8px rgba(14, 50, 90, 0.08);
+        }
+
+        body {
+            font-family: var(--font);
+            background: linear-gradient(140deg, #0C447C 0%, #185FA5 40%, #378ADD 80%, #85B7EB 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: -120px;
+            right: -120px;
+            width: 480px;
+            height: 480px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
+            pointer-events: none;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -80px;
+            left: -80px;
+            width: 320px;
+            height: 320px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            pointer-events: none;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+            max-width: 440px;
+            padding: 40px 36px 36px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 28px;
+        }
+
+        .logo-mark {
+            width: 36px;
+            height: 36px;
+            border-radius: 9px;
+            background: var(--blue-600);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 17px;
+            font-weight: 600;
+            color: #fff;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--gray-800);
+            letter-spacing: -0.3px;
+        }
+
+        .logo-text span {
+            color: var(--blue-600);
+        }
+
+        h2 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--gray-800);
+            margin-bottom: 6px;
+            letter-spacing: -0.3px;
+        }
+
+        .subtitle {
+            font-size: 13.5px;
+            color: var(--gray-400);
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .view {
+            display: none;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .user-type-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .user-type-btn {
+            border: 1.5px solid var(--gray-200);
+            border-radius: var(--radius);
+            padding: 20px 12px 16px;
+            cursor: pointer;
+            background: var(--gray-50);
+            transition: all 0.15s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            text-align: center;
+        }
+
+        .user-type-btn:hover {
+            border-color: var(--blue-400);
+            background: var(--blue-50);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(24, 95, 165, 0.12);
+        }
+
+        .user-type-btn .icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--blue-100);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-type-btn .icon svg {
+            width: 22px;
+            height: 22px;
+            stroke: var(--blue-800);
+            fill: none;
+            stroke-width: 1.8;
+        }
+
+        .user-type-btn .label {
+            font-size: 13.5px;
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+
+        .user-type-btn .desc {
+            font-size: 11.5px;
+            color: var(--gray-400);
+            line-height: 1.4;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--gray-200);
+        }
+
+        .divider span {
+            font-size: 12px;
+            color: var(--gray-400);
+            white-space: nowrap;
+        }
+
+        .create-link-btn {
+            width: 100%;
+            padding: 11px;
+            border: 1.5px dashed var(--gray-200);
+            border-radius: var(--radius);
+            background: transparent;
+            font-family: var(--font);
+            font-size: 13.5px;
+            font-weight: 500;
+            color: var(--blue-600);
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .create-link-btn:hover {
+            border-color: var(--blue-400);
+            background: var(--blue-50);
+        }
+
+        .field-group {
+            margin-bottom: 16px;
+        }
+
+        .field-group label {
+            display: block;
+            font-size: 12.5px;
+            font-weight: 500;
+            color: var(--gray-600);
+            margin-bottom: 6px;
+            letter-spacing: 0.2px;
+        }
+
+        .field-group input {
+            width: 100%;
+            padding: 10px 13px;
+            border: 1.5px solid var(--gray-200);
+            border-radius: var(--radius);
+            font-family: var(--font);
+            font-size: 14px;
+            color: var(--gray-800);
+            background: #fff;
+            transition: border-color 0.15s, box-shadow 0.15s;
+            outline: none;
+        }
+
+        .field-group input:focus {
+            border-color: var(--blue-400);
+            box-shadow: 0 0 0 3px rgba(55, 138, 221, 0.12);
+        }
+
+        .field-group input.error {
+            border-color: var(--red-400);
+        }
+
+        .field-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .pw-wrapper {
+            position: relative;
+        }
+
+        .pw-wrapper input {
+            padding-right: 40px;
+        }
+
+        .pw-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            color: var(--gray-400);
+            display: flex;
+            align-items: center;
+        }
+
+        .pw-toggle svg {
+            width: 16px;
+            height: 16px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .pw-strength {
+            margin-top: 8px;
+        }
+
+        .pw-strength-bar {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 4px;
+        }
+
+        .pw-bar {
+            flex: 1;
+            height: 3px;
+            border-radius: 2px;
+            background: var(--gray-200);
+            transition: background 0.2s;
+        }
+
+        .pw-bar.weak {
+            background: var(--red-400);
+        }
+
+        .pw-bar.medium {
+            background: #F0A500;
+        }
+
+        .pw-bar.strong {
+            background: var(--green-600);
+        }
+
+        .pw-strength-text {
+            font-size: 11.5px;
+            color: var(--gray-400);
+        }
+
+        .pw-rules {
+            margin-top: 8px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px;
+        }
+
+        .pw-rule {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11.5px;
+            color: var(--gray-400);
+        }
+
+        .pw-rule .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--gray-200);
+            flex-shrink: 0;
+            transition: background 0.2s;
+        }
+
+        .pw-rule.ok .dot {
+            background: var(--green-600);
+        }
+
+        .pw-rule.ok {
+            color: var(--green-600);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 12px;
+            background: var(--blue-600);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius);
+            font-family: var(--font);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            background: var(--blue-800);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(12, 68, 124, 0.25);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-primary .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: var(--font);
+            font-size: 13px;
+            color: var(--gray-400);
+            padding: 0;
+            margin-bottom: 20px;
+            transition: color 0.15s;
+        }
+
+        .back-btn:hover {
+            color: var(--blue-600);
+        }
+
+        .back-btn svg {
+            width: 14px;
+            height: 14px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2.2;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11.5px;
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+
+        .badge.individual {
+            background: var(--blue-50);
+            color: var(--blue-800);
+        }
+
+        .badge.sme {
+            background: #EEF6FF;
+            color: var(--blue-800);
+        }
+
+        .alert {
+            padding: 10px 13px;
+            border-radius: var(--radius);
+            font-size: 13px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .alert-error {
+            background: var(--red-50);
+            color: var(--red-600);
+            border: 1px solid #FFCECE;
+        }
+
+        .alert-success {
+            background: var(--green-50);
+            color: var(--green-600);
+            border: 1px solid #B7E8C6;
+        }
+
+        .alert svg {
+            width: 15px;
+            height: 15px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .footer-link {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 13px;
+            color: var(--gray-400);
+        }
+
+        .footer-link a {
+            color: var(--blue-600);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer-link a:hover {
+            text-decoration: underline;
+        }
+
+        .success-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--green-50);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+        }
+
+        .success-icon svg {
+            width: 28px;
+            height: 28px;
+            stroke: var(--green-600);
+            fill: none;
+            stroke-width: 2.2;
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                padding: 28px 20px 24px;
+            }
+
+            .field-row {
+                grid-template-columns: 1fr;
+            }
+
+            .pw-rules {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+
+        <!-- Logo -->
+        <div class="logo-row">
+            <div class="logo-mark">F</div>
+            <div class="logo-text">Fin<span>Flow</span></div>
+        </div>
+
+        <!-- VIEW: Choose user type -->
+        <div class="view active" id="view-choose">
+            <h2>Welcome back</h2>
+            <p class="subtitle">Select your account type to continue</p>
+            <div class="user-type-grid">
+                <button class="user-type-btn" onclick="selectType('individual')">
+                    <div class="icon">
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="12" cy="7" r="4" />
+                            <path d="M4 21v-1a8 8 0 0 1 16 0v1" />
+                        </svg>
+                    </div>
+                    <div class="label">Individual</div>
+                    <div class="desc">Personal finance tracking</div>
+                </button>
+                <button class="user-type-btn" onclick="selectType('sme')">
+                    <div class="icon">
+                        <svg viewBox="0 0 24 24">
+                            <rect x="2" y="7" width="20" height="14" rx="2" />
+                            <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                            <line x1="12" y1="12" x2="12" y2="16" />
+                            <line x1="10" y1="14" x2="14" y2="14" />
+                        </svg>
+                    </div>
+                    <div class="label">SME</div>
+                    <div class="desc">Business &amp; accounting</div>
+                </button>
+            </div>
+            <div class="divider"><span>or</span></div>
+            <button class="create-link-btn" onclick="showCreateType()">+ Create new account</button>
+        </div>
+
+        <!-- VIEW: Login -->
+        <div class="view" id="view-login">
+            <button class="back-btn" onclick="goBack('view-choose')">
+                <svg viewBox="0 0 24 24">
+                    <polyline points="15 18 9 12 15 6" />
+                </svg>
+                Back
+            </button>
+            <span class="badge" id="login-badge"></span>
+            <h2>Sign in</h2>
+            <p class="subtitle" id="login-subtitle"></p>
+            <div id="login-alert"></div>
+            <div class="field-group">
+                <label>Email address</label>
+                <input type="email" id="login-email" placeholder="you@example.com" />
+            </div>
+            <div class="field-group">
+                <label>Password</label>
+                <div class="pw-wrapper">
+                    <input type="password" id="login-password" placeholder="Enter your password" />
+                    <button class="pw-toggle" onclick="togglePw('login-password', this)" type="button">
+                        <svg id="eye-login" viewBox="0 0 24 24">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                            <circle cx="12" cy="12" r="3" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <button class="btn-primary" id="login-btn" onclick="handleLogin()">
+                <span id="login-btn-text">Sign in</span>
+            </button>
+            <div class="footer-link">
+                Don't have an account? <a href="#" onclick="showCreate(); return false;">Create one</a>
+            </div>
+        </div>
+
+        <!-- VIEW: Choose type for registration -->
+        <div class="view" id="view-create-type">
+            <button class="back-btn" onclick="goBack('view-choose')">
+                <svg viewBox="0 0 24 24">
+                    <polyline points="15 18 9 12 15 6" />
+                </svg>
+                Back
+            </button>
+            <h2>Create account</h2>
+            <p class="subtitle">What type of account do you need?</p>
+            <div class="user-type-grid">
+                <button class="user-type-btn" onclick="selectTypeForCreate('individual')">
+                    <div class="icon">
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="12" cy="7" r="4" />
+                            <path d="M4 21v-1a8 8 0 0 1 16 0v1" />
+                        </svg>
+                    </div>
+                    <div class="label">Individual</div>
+                    <div class="desc">Personal finance</div>
+                </button>
+                <button class="user-type-btn" onclick="selectTypeForCreate('sme')">
+                    <div class="icon">
+                        <svg viewBox="0 0 24 24">
+                            <rect x="2" y="7" width="20" height="14" rx="2" />
+                            <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                            <line x1="12" y1="12" x2="12" y2="16" />
+                            <line x1="10" y1="14" x2="14" y2="14" />
+                        </svg>
+                    </div>
+                    <div class="label">SME</div>
+                    <div class="desc">Business &amp; accounting</div>
+                </button>
+            </div>
+        </div>
+
+        <!-- VIEW: Register -->
+        <div class="view" id="view-register">
+            <button class="back-btn" onclick="goBack('view-create-type')">
+                <svg viewBox="0 0 24 24">
+                    <polyline points="15 18 9 12 15 6" />
+                </svg>
+                Back
+            </button>
+            <span class="badge" id="reg-badge"></span>
+            <h2>Create account</h2>
+            <p class="subtitle">Fill in your details to get started</p>
+            <div id="reg-alert"></div>
+            <div class="field-row">
+                <div class="field-group">
+                    <label>First name</label>
+                    <input type="text" id="reg-firstname" placeholder="Jane" />
+                </div>
+                <div class="field-group">
+                    <label>Last name</label>
+                    <input type="text" id="reg-lastname" placeholder="Doe" />
+                </div>
+            </div>
+            <div class="field-group">
+                <label>Phone number</label>
+                <input type="tel" id="reg-phone" placeholder="+91 XXXXX XXXXX" />
+            </div>
+            <div class="field-group">
+                <label>Email address</label>
+                <input type="email" id="reg-email" placeholder="you@example.com" />
+            </div>
+            <div class="field-group">
+                <label>Create password</label>
+                <div class="pw-wrapper">
+                    <input type="password" id="reg-password" placeholder="Min 8 characters"
+                        oninput="checkPassword(this.value)" />
+                    <button class="pw-toggle" onclick="togglePw('reg-password', this)" type="button">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                            <circle cx="12" cy="12" r="3" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="pw-strength">
+                    <div class="pw-strength-bar">
+                        <div class="pw-bar" id="bar1"></div>
+                        <div class="pw-bar" id="bar2"></div>
+                        <div class="pw-bar" id="bar3"></div>
+                        <div class="pw-bar" id="bar4"></div>
+                    </div>
+                    <div class="pw-rules">
+                        <div class="pw-rule" id="rule-len">
+                            <div class="dot"></div>8+ characters
+                        </div>
+                        <div class="pw-rule" id="rule-upper">
+                            <div class="dot"></div>Uppercase letter
+                        </div>
+                        <div class="pw-rule" id="rule-lower">
+                            <div class="dot"></div>Lowercase letter
+                        </div>
+                        <div class="pw-rule" id="rule-digit">
+                            <div class="dot"></div>Number (0–9)
+                        </div>
+                        <div class="pw-rule" id="rule-special">
+                            <div class="dot"></div>Special character
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn-primary" id="reg-btn" onclick="handleRegister()">
+                <span id="reg-btn-text">Create account</span>
+            </button>
+            <div class="footer-link">
+                Already have an account? <a href="#" onclick="showLoginFromReg(); return false;">Sign in</a>
+            </div>
+        </div>
+
+        <!-- VIEW: Success -->
+        <div class="view" id="view-success">
+            <div class="success-icon">
+                <svg viewBox="0 0 24 24">
+                    <polyline points="20 6 9 17 4 12" />
+                </svg>
+            </div>
+            <h2 style="text-align:center;" id="success-title">Login successful!</h2>
+            <p class="subtitle" style="text-align:center;" id="success-msg">Redirecting you to your dashboard…</p>
+            <div style="display:flex;align-items:center;justify-content:center;margin-top:20px;">
+                <div class="spinner"
+                    style="width:22px;height:22px;border:2.5px solid var(--blue-100);border-top-color:var(--blue-600);border-radius:50%;animation:spin 0.7s linear infinite;">
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        /* ---- State ---- */
+        let currentType = null; // 'individual' | 'sme'
+
+        const APPS = {
+            individual: 'https://finflow-individual.vercel.app/dashboard',
+            sme: 'https://finflowsme.vercel.app/'
+        };
+
+        const TYPE_LABELS = {
+            individual: 'Individual',
+            sme: 'SME Business'
+        };
+
+        /* ---- Navigation ---- */
+        function show(viewId) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+        }
+
+        function goBack(viewId) { show(viewId); }
+
+        function selectType(type) {
+            currentType = type;
+            document.getElementById('login-badge').className = 'badge ' + type;
+            document.getElementById('login-badge').textContent = TYPE_LABELS[type] + ' Account';
+            document.getElementById('login-subtitle').textContent =
+                type === 'individual'
+                    ? 'Sign in to manage your personal finances'
+                    : 'Sign in to manage your business finances';
+            clearAlert('login-alert');
+            document.getElementById('login-email').value = '';
+            document.getElementById('login-password').value = '';
+            show('view-login');
+        }
+
+        function showCreateType() { show('view-create-type'); }
+
+        function selectTypeForCreate(type) {
+            currentType = type;
+            document.getElementById('reg-badge').className = 'badge ' + type;
+            document.getElementById('reg-badge').textContent = TYPE_LABELS[type] + ' Account';
+            clearAlert('reg-alert');
+            ['reg-firstname', 'reg-lastname', 'reg-phone', 'reg-email', 'reg-password'].forEach(id => {
+                document.getElementById(id).value = '';
+            });
+            checkPassword('');
+            show('view-register');
+        }
+
+        function showCreate() {
+            show('view-create-type');
+        }
+
+        function showLoginFromReg() {
+            selectType(currentType || 'individual');
+        }
+
+        /* ---- Auth helpers ---- */
+        function setLoading(btnId, textId, loading, label) {
+            const btn = document.getElementById(btnId);
+            const txt = document.getElementById(textId);
+            if (loading) {
+                btn.disabled = true;
+                txt.textContent = '';
+                const s = document.createElement('div');
+                s.className = 'spinner';
+                btn.insertBefore(s, txt);
+            } else {
+                btn.disabled = false;
+                txt.textContent = label;
+                const s = btn.querySelector('.spinner');
+                if (s) s.remove();
+            }
+        }
+
+        function showAlert(containerId, type, message) {
+            const icon = type === 'error'
+                ? '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>'
+                : '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
+            document.getElementById(containerId).innerHTML =
+                `<div class="alert alert-${type}">${icon}<span>${message}</span></div>`;
+        }
+
+        function clearAlert(containerId) {
+            document.getElementById(containerId).innerHTML = '';
+        }
+
+        /* ---- Login ---- */
+        async function handleLogin() {
+            clearAlert('login-alert');
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+
+            if (!email || !password) {
+                showAlert('login-alert', 'error', 'Please enter your email and password.');
+                return;
+            }
+            if (!validateEmail(email)) {
+                showAlert('login-alert', 'error', 'Please enter a valid email address.');
+                return;
+            }
+
+            setLoading('login-btn', 'login-btn-text', true, 'Sign in');
+
+            try {
+                const res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password, userType: currentType })
+                });
+                const data = await res.json();
+
+                if (res.ok && data.success) {
+                    redirectSuccess(currentType);
+                } else {
+                    showAlert('login-alert', 'error', data.message || 'Invalid email or password. Please try again.');
+                }
+            } catch (err) {
+                /* ---- Dev/demo fallback when API not reachable ---- */
+                console.warn('API not reachable, using demo mode:', err.message);
+                showAlert('login-alert', 'error',
+                    'Could not connect to the authentication server. Ensure the /api/auth/login endpoint is deployed on your Vercel backend.');
+            }
+
+            setLoading('login-btn', 'login-btn-text', false, 'Sign in');
+        }
+
+        /* ---- Register ---- */
+        async function handleRegister() {
+            clearAlert('reg-alert');
+            const first = document.getElementById('reg-firstname').value.trim();
+            const last = document.getElementById('reg-lastname').value.trim();
+            const phone = document.getElementById('reg-phone').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+            const password = document.getElementById('reg-password').value;
+
+            if (!first || !last) { showAlert('reg-alert', 'error', 'Please enter your first and last name.'); return; }
+            if (!phone) { showAlert('reg-alert', 'error', 'Please enter your phone number.'); return; }
+            if (!email || !validateEmail(email)) { showAlert('reg-alert', 'error', 'Please enter a valid email address.'); return; }
+
+            const pwCheck = validatePassword(password);
+            if (!pwCheck.valid) { showAlert('reg-alert', 'error', pwCheck.message); return; }
+
+            setLoading('reg-btn', 'reg-btn-text', true, 'Create account');
+
+            try {
+                const res = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        firstName: first, lastName: last, phone, email, password,
+                        userType: currentType
+                    })
+                });
+                const data = await res.json();
+
+                if (res.ok && data.success) {
+                    redirectSuccess(currentType, true);
+                } else {
+                    showAlert('reg-alert', 'error', data.message || 'Registration failed. Please try again.');
+                }
+            } catch (err) {
+                console.warn('API not reachable, using demo mode:', err.message);
+                showAlert('reg-alert', 'error',
+                    'Could not connect to the authentication server. Ensure the /api/auth/register endpoint is deployed on your Vercel backend.');
+            }
+
+            setLoading('reg-btn', 'reg-btn-text', false, 'Create account');
+        }
+
+        /* ---- Redirect ---- */
+        function redirectSuccess(type, isNew) {
+            document.getElementById('success-title').textContent = isNew ? 'Account created!' : 'Login successful!';
+            document.getElementById('success-msg').textContent =
+                'Redirecting you to ' + (type === 'sme' ? 'FinFlow SME' : 'FinFlow Individual') + '…';
+            show('view-success');
+            setTimeout(() => { window.location.href = APPS[type]; }, 2200);
+        }
+
+        /* ---- Validators ---- */
+        function validateEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
+
+        function validatePassword(p) {
+            if (p.length < 8) return { valid: false, message: 'Password must be at least 8 characters.' };
+            if (!/[A-Z]/.test(p)) return { valid: false, message: 'Password needs at least one uppercase letter.' };
+            if (!/[a-z]/.test(p)) return { valid: false, message: 'Password needs at least one lowercase letter.' };
+            if (!/\d/.test(p)) return { valid: false, message: 'Password needs at least one digit.' };
+            if (!/[^A-Za-z0-9]/.test(p)) return { valid: false, message: 'Password needs at least one special character.' };
+            return { valid: true };
+        }
+
+        /* ---- Password strength UI ---- */
+        function checkPassword(p) {
+            const rules = {
+                len: p.length >= 8,
+                upper: /[A-Z]/.test(p),
+                lower: /[a-z]/.test(p),
+                digit: /\d/.test(p),
+                special: /[^A-Za-z0-9]/.test(p)
+            };
+            ['len', 'upper', 'lower', 'digit', 'special'].forEach(r => {
+                const el = document.getElementById('rule-' + r);
+                if (rules[r]) el.classList.add('ok'); else el.classList.remove('ok');
+            });
+            const score = Object.values(rules).filter(Boolean).length;
+            const bars = document.querySelectorAll('.pw-bar');
+            bars.forEach((b, i) => {
+                b.className = 'pw-bar';
+                if (score >= 2 && i === 0) b.classList.add('weak');
+                if (score >= 3 && i <= 1) b.classList.add('medium');
+                if (score >= 4 && i <= 2) b.classList.add('medium');
+                if (score === 5) { bars.forEach(bar => bar.classList.add('strong')); }
+            });
+            if (score <= 1) bars.forEach((b, i) => { b.className = 'pw-bar'; if (i === 0 && score > 0) b.classList.add('weak'); });
+        }
+
+        /* ---- Password visibility toggle ---- */
+        function togglePw(inputId, btn) {
+            const inp = document.getElementById(inputId);
+            const isHidden = inp.type === 'password';
+            inp.type = isHidden ? 'text' : 'password';
+            btn.querySelector('svg').innerHTML = isHidden
+                ? '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>'
+                : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+        }
+
+        /* ---- Enter key ---- */
+        document.addEventListener('keydown', e => {
+            if (e.key !== 'Enter') return;
+            const active = document.querySelector('.view.active');
+            if (!active) return;
+            if (active.id === 'view-login') handleLogin();
+            if (active.id === 'view-register') handleRegister();
+        });
+    </script>
+
+</body>
+
+</html>
