@@ -5,8 +5,8 @@
 // Required environment variables (set in Vercel dashboard):
 //   MONGODB_URI  — e.g. mongodb+srv://user:pass@cluster.mongodb.net/finflow
 
-const { MongoClient } = require('mongodb');
-const bcrypt = require('bcryptjs');
+import { MongoClient } from 'mongodb';
+import bcrypt from 'bcryptjs';
 
 let cachedClient = null;
 
@@ -27,7 +27,7 @@ function validatePassword(p) {
     return null;
 }
 
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -93,4 +93,4 @@ module.exports = async function handler(req, res) {
         console.error('Register error:', err);
         return res.status(500).json({ success: false, message: 'Server error. Please try again later.' });
     }
-};
+}
