@@ -2,6 +2,7 @@
 // Vercel serverless function — POST /api/auth/register
 // Creates a new user in MongoDB (hashes password with bcrypt).
 //
+// 
 // Required environment variables (set in Vercel dashboard):
 //   MONGODB_URI  — e.g. mongodb+srv://user:pass@cluster.mongodb.net/finflow
 
