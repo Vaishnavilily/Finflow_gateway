@@ -18,6 +18,12 @@ function validatePassword(p) {
     return null;
 }
 
+function resolveUserCollectionName(userType) {
+    if (userType === 'individual') return 'individual_users';
+    if (userType === 'sme') return 'sme_users';
+    return null;
+}
+
 export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -32,6 +38,11 @@ export default async function handler(req, res) {
         return res.status(400).json({ success: false, message: 'All fields are required.' });
     }
 
+    const collectionName = resolveUserCollectionName(userType);
+    if (!collectionName) {
+        return res.status(400).json({ success: false, message: "Invalid userType. Use 'individual' or 'sme'." });
+    }
+
     const pwError = validatePassword(password);
     if (pwError) return res.status(400).json({ success: false, message: pwError });
 
@@ -43,8 +54,8 @@ export default async function handler(req, res) {
     try {
         const db = await getDb();
 
-        const collectionName = userType === 'sme' ? 'sme_users' : 'individual_users';
         const usersCollection = db.collection(collectionName);
+        await usersCollection.createIndex({ email: 1 }, { unique: true });
 
         const existing = await usersCollection.findOne({ email: email.toLowerCase().trim() });
         if (existing) {

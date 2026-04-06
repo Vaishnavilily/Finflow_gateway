@@ -899,7 +899,7 @@
                 const data = await res.json();
 
                 if (res.ok && data.success) {
-                    redirectSuccess(currentType);
+                    redirectSuccess(currentType, false, data.user);
                 } else {
                     showAlert('login-alert', 'error', data.message || 'Invalid email or password. Please try again.');
                 }
@@ -943,7 +943,7 @@
                 const data = await res.json();
 
                 if (res.ok && data.success) {
-                    redirectSuccess(currentType, true);
+                    redirectSuccess(currentType, true, data.user);
                 } else {
                     showAlert('reg-alert', 'error', data.message || 'Registration failed. Please try again.');
                 }
@@ -957,12 +957,25 @@
         }
 
         /* ---- Redirect ---- */
-        function redirectSuccess(type, isNew) {
+        function redirectSuccess(type, isNew, user) {
             document.getElementById('success-title').textContent = isNew ? 'Account created!' : 'Login successful!';
             document.getElementById('success-msg').textContent =
                 'Redirecting you to ' + (type === 'sme' ? 'FinFlow SME' : 'FinFlow Individual') + '…';
             show('view-success');
-            setTimeout(() => { window.location.href = APPS[type]; }, 2200);
+            const authUser = {
+                authId: user?.id ? String(user.id) : '',
+                email: user?.email ? String(user.email).toLowerCase() : '',
+                name: [user?.firstName, user?.lastName].filter(Boolean).join(' ').trim(),
+                userType: type
+            };
+            if (authUser.authId) {
+                localStorage.setItem('finflow.auth', JSON.stringify(authUser));
+                localStorage.setItem('gatewayUser', JSON.stringify(authUser));
+            }
+            const targetUrl = new URL(APPS[type]);
+            if (authUser.authId) targetUrl.searchParams.set('authId', authUser.authId);
+            if (authUser.email) targetUrl.searchParams.set('email', authUser.email);
+            setTimeout(() => { window.location.href = targetUrl.toString(); }, 2200);
         }
 
         /* ---- Validators ---- */

@@ -8,6 +8,12 @@
 import bcrypt from 'bcryptjs';
 import { getDb } from '../_lib/db.js';
 
+function resolveUserCollectionName(userType) {
+    if (userType === 'individual') return 'individual_users';
+    if (userType === 'sme') return 'sme_users';
+    return null;
+}
+
 export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -22,10 +28,15 @@ export default async function handler(req, res) {
         return res.status(400).json({ success: false, message: 'Email, password and userType are required.' });
     }
 
+    const collectionName = resolveUserCollectionName(userType);
+    if (!collectionName) {
+        return res.status(400).json({ success: false, message: "Invalid userType. Use 'individual' or 'sme'." });
+    }
+
     try {
         const db = await getDb();
-        const collectionName = userType === 'sme' ? 'sme_users' : 'individual_users';
         const usersCollection = db.collection(collectionName);
+        await usersCollection.createIndex({ email: 1 }, { unique: true });
 
         const user = await usersCollection.findOne({ email: email.toLowerCase().trim() });
         if (!user) return res.status(401).json({ success: false, message: 'No account found with this email address.' });
