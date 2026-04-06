@@ -5,18 +5,8 @@
 //   MONGODB_URI  — e.g. mongodb+srv://user:pass@cluster.mongodb.net/finflow
 //   JWT_SECRET   — any long random string for signing tokens (optional but recommended)
 
-import { MongoClient } from 'mongodb';   // ✅ ESM import
 import bcrypt from 'bcryptjs';
-
-let cachedClient = null;
-
-async function getClient() {
-    if (cachedClient) return cachedClient;
-    const client = new MongoClient(process.env.MONGODB_URI);
-    await client.connect();
-    cachedClient = client;
-    return client;
-}
+import { getDb } from '../_lib/db.js';
 
 export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -33,8 +23,7 @@ export default async function handler(req, res) {
     }
 
     try {
-        const client = await getClient();
-        const db = client.db('finflow');
+        const db = await getDb();
         const collectionName = userType === 'sme' ? 'sme_users' : 'individual_users';
         const usersCollection = db.collection(collectionName);
 
@@ -57,6 +46,6 @@ export default async function handler(req, res) {
         });
     } catch (err) {
         console.error('Login error:', err);
-        return res.status(500).json({ success: false, message: 'Server error. Please try again later.' });
+        return res.status(500).json({ success: false, message: err.message || 'Server error. Please try again later.' });
     }
 }

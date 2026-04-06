@@ -6,18 +6,8 @@
 // Required environment variables (set in Vercel dashboard):
 //   MONGODB_URI  — e.g. mongodb+srv://user:pass@cluster.mongodb.net/finflow
 
-import { MongoClient } from 'mongodb';
 import bcrypt from 'bcryptjs';
-
-let cachedClient = null;
-
-async function getClient() {
-    if (cachedClient) return cachedClient;
-    const client = new MongoClient(process.env.MONGODB_URI);
-    await client.connect();
-    cachedClient = client;
-    return client;
-}
+import { getDb } from '../_lib/db.js';
 
 function validatePassword(p) {
     if (p.length < 8) return 'Password must be at least 8 characters.';
@@ -51,8 +41,7 @@ export default async function handler(req, res) {
     }
 
     try {
-        const client = await getClient();
-        const db = client.db('finflow');
+        const db = await getDb();
 
         const collectionName = userType === 'sme' ? 'sme_users' : 'individual_users';
         const usersCollection = db.collection(collectionName);
@@ -92,6 +81,6 @@ export default async function handler(req, res) {
 
     } catch (err) {
         console.error('Register error:', err);
-        return res.status(500).json({ success: false, message: 'Server error. Please try again later.' });
+        return res.status(500).json({ success: false, message: err.message || 'Server error. Please try again later.' });
     }
 }

@@ -1,16 +1,6 @@
 // api/seed.js
-import { MongoClient } from 'mongodb';
 import bcrypt from 'bcryptjs';
-
-let cachedClient = null;
-
-async function getClient() {
-    if (cachedClient) return cachedClient;
-    const client = new MongoClient(process.env.MONGODB_URI);
-    await client.connect();
-    cachedClient = client;
-    return client;
-}
+import { getDb } from './_lib/db.js';
 
 const defaultUsers = [
     {
@@ -41,8 +31,7 @@ export default async function handler(req, res) {
     }
 
     try {
-        const client = await getClient();
-        const db = client.db('finflow');
+        const db = await getDb();
         const results = [];
 
         for (const user of defaultUsers) {

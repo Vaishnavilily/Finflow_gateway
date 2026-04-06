@@ -32,6 +32,7 @@ In the Vercel project settings → Environment Variables, add:
 | Name | Value |
 |------|-------|
 | `MONGODB_URI` | `mongodb+srv://<user>:<password>@<cluster>.mongodb.net/finflow` |
+| `MONGODB_DB` (optional) | `finflow` (defaults to `finflow` if omitted) |
 
 ### 4. MongoDB collections
 The API expects these collections inside the `finflow` database:
